@@ -45,3 +45,15 @@ contract Instance {
         return cleared;
     }
 }
+
+constructor() {
+    // deploy the four core contracts
+    ethernaut = new Ethernaut();
+    proxyAdmin = new ProxyAdmin();
+    implementation = new Statistics();
+    proxyStats = new ProxyStats(address(implementation), address(proxyAdmin), address(ethernaut));
+    // initialise the ethernaut contract with the proxystats method
+    ethernaut.setStatistics(address(proxyStats));
+    // here is where statistics seats behind the proxy
+    implementation = Statistics(address(proxyStats));
+}
